@@ -31,12 +31,12 @@ class CFR:
         for a in actions:
             if self.poker.player(h) == self.players[0]:
                 v_sigma_infoset[a] = self.run_cfr(h+a,i,t,
-                                                  self.strategy_profile.get_strategy_profile(t,info_set.get_key(),a) * pi1,pi2)
+                                                  self.strategy_profile.get_strategy_profile(t,info_set,a) * pi1,pi2)
             elif self.poker.player(h) == self.players[1]:
                 v_sigma_infoset[a] = self.run_cfr(h + a, i, t,pi1,
-                                                  self.strategy_profile.get_strategy_profile(t, info_set.get_key(),a) * pi2)
+                                                  self.strategy_profile.get_strategy_profile(t, info_set,a) * pi2)
 
-            v_sigma = v_sigma + self.strategy_profile.get_strategy_profile(t,info_set.get_key(),a) * v_sigma_infoset[a]
+            v_sigma = v_sigma + self.strategy_profile.get_strategy_profile(t,info_set,a) * v_sigma_infoset[a]
 
         if self.poker.player(h) == i:
             pi_minus_i = pi2 if i == 1 else pi1
@@ -44,7 +44,7 @@ class CFR:
 
             for a in actions:
                 self.cumulative_regret_table.add_regrets(info_set.get_key(),a,pi_minus_i * (v_sigma_infoset[a] - v_sigma))
-                self.cumulative_strategy_table.add_strategy(info_set.get_key(),a,pi_i * self.strategy_profile.get_strategy_profile(t,info_set.get_key(),a))
+                self.cumulative_strategy_table.add_strategy(info_set.get_key(),a,pi_i * self.strategy_profile.get_strategy_profile(t,info_set,a))
 
             regret_positive_total = 0
             for a in actions:
@@ -53,8 +53,8 @@ class CFR:
             for a in actions:
                 if regret_positive_total > 0:
                     regret_positive = self.cumulative_regret_table.get_regrets(info_set,a) if self.cumulative_regret_table.get_regrets(info_set,a) > 0 else 0
-                    self.strategy_profile.set_strategy_profile(t + 1, info_set.get_key(), a, regret_positive / regret_positive_total)
+                    self.strategy_profile.set_strategy_profile(t + 1, info_set, a, regret_positive / regret_positive_total)
                 else:
-                    self.strategy_profile.set_strategy_profile(t+1,info_set.get_key(),a,1.0/len(actions))
+                    self.strategy_profile.set_strategy_profile(t+1,info_set,a,1.0/len(actions))
 
             return v_sigma
