@@ -25,44 +25,57 @@ class RunCFR:
             self.cumulative_strategy_table = strategyTable.StrategyTable()
             self.strategy_profile = stratgeyProfile.StrategyProfile()
         else:
-            file = open(dir_name + '/' + self.crt, 'r')
+            file = open(dir_name + '/' + self.crt, 'rb')
             self.cumulative_regret_table = pickle.load(file)
+            file.close()
 
-            file = open(dir_name + '/' + self.cst, 'r')
+            file = open(dir_name + '/' + self.cst, 'rb')
             self.cumulative_strategy_table = pickle.load(file)
+            file.close()
 
-            file = open(dir_name + '/' + self.sp, 'r')
+            file = open(dir_name + '/' + self.sp, 'rb')
             self.strategy_profile = pickle.load(file)
+            file.close()
 
-            file = open(dir_name + '/' + self.inofosset, 'r')
+            file = open(dir_name + '/' + self.inofosset, 'rb')
             self.info_sets = pickle.load(file)
+            file.close()
 
 
 
         self.cfr = cfr.CFR(self.poker,self.cumulative_regret_table,self.cumulative_strategy_table,self.strategy_profile,self.info_sets)
 
-    def run_cfr(self,iterations):
-        for iter in range(iterations):
+    def run_cfr(self,start,iterations):
+        for iter in range(start,iterations):
             for i in self.players:
                 self.cfr.run_cfr('',i,iter,1,1)
 
-            if iter % 1 == 0:
-                dir_name = 'weights_' + str(iter)
-                os.makedir(dir_name)
 
-                file = open(dir_name + '/' + self.crt,'w')
+            if iter % 10 == 0:
+                dir_name = './weights/weights_' + str(iter)
+                os.makedirs(dir_name)
+
+                file = open(dir_name + '/' + self.crt,'wb')
                 pickle.dump(self.cumulative_regret_table,file)
+                file.close()
 
-                file = open(dir_name + '/' + self.cst, 'w')
+                file = open(dir_name + '/' + self.cst, 'wb')
                 pickle.dump(self.cumulative_strategy_table,file)
+                file.close()
 
-                file = open(dir_name + '/' + self.sp, 'w')
+                file = open(dir_name + '/' + self.sp, 'wb')
                 pickle.dump(self.strategy_profile,file)
+                file.close()
 
-                file = open(dir_name + '/' + self.inofosset, 'w')
+                file = open(dir_name + '/' + self.inofosset, 'wb')
                 pickle.dump(self.info_sets,file)
+                file.close()
 
 
 # Running CFR
-run_cfr = RunCFR()
-run_cfr.run_cfr(10)
+start = 0
+total_iter = 100
+directory_to_load = '' # For loading weights input relevant weight folder
+
+run_cfr = RunCFR(directory_to_load)
+run_cfr.run_cfr(start,total_iter)
