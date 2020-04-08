@@ -5,11 +5,14 @@ class InfoSets:
 
     def __init__(self):
         self.info_set_list = {}
-        self.allPosiibleAction = ['B', 'C', 'F']
+        self.allPosiibleAction = ['BB', 'CC', 'FF']
 
-    def extract_key_from_history(self,h):
+    def extract_key_from_history(self,h,current_player=1):
         key = []
-        new_h = h[0:4] + h[8:] if len(h) > 4 else 0
+        if current_player == 1:
+            new_h = h[0:4] + h[8:] if len(h) > 4 else 0
+        else:
+            new_h = h[4:8] + h[8:] if len(h) > 4 else 0
         c1 = new_h[0:2]
         c2 = new_h[2:4]
 
@@ -39,8 +42,8 @@ class InfoSets:
 
         return "".join(key)
 
-    def get_info_set(self,h):
-        key = self.extract_key_from_history(h)
+    def get_info_set(self,h,current_player):
+        key = self.extract_key_from_history(h,current_player)
 
         if key not in self.info_set_list:
             info_set = infoSet.InfoSet(key)

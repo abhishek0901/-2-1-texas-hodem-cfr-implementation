@@ -1,5 +1,7 @@
 # This implements Counter factual regret minimization
 
+# CFR -> h = AdAcKhkc
+
 class CFR:
 
     #Initialize CFR with all important variables
@@ -15,12 +17,12 @@ class CFR:
 
         if self.poker.is_terminal(h):
             #TODO -> Needs discussion with david
-            return self.poker.utility(h)  # Assumption - poker class has to check which player won and should return appropriate utility
+            return self.poker.utility(h)[self.poker.player(h)-1]  # Assumption - poker class has to check which player won and should return appropriate utility
         elif self.poker.player(h) not in self.players:
-            card = self.poker.get_next_card() #poker class should know which round it is in
+            card = self.poker.deal_cards(h) #poker class should know which round it is in
             return self.run_cfr(h+card,i,t,pi1,pi2)
 
-        info_set = self.info_sets.get_info_set(h)
+        info_set = self.info_sets.get_info_set(h,self.poker.player(h))
 
         v_sigma = 0
         actions = info_set.get_actions()
@@ -57,4 +59,4 @@ class CFR:
                 else:
                     self.strategy_profile.set_strategy_profile(t+1,info_set,a,1.0/len(actions))
 
-            return v_sigma
+        return v_sigma

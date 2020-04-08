@@ -51,7 +51,7 @@ class RunCFR:
                 self.cfr.run_cfr('',i,iter,1,1)
 
 
-            if iter % 10 == 0:
+            if iter % 10000 == 0:
                 dir_name = './weights/weights_' + str(iter)
                 os.makedirs(dir_name)
 
@@ -74,7 +74,7 @@ class RunCFR:
 
 # Running CFR
 start = 0
-total_iter = 100
+total_iter = 1000000
 directory_to_load = '' # For loading weights input relevant weight folder
 
 run_cfr = RunCFR(directory_to_load)
