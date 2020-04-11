@@ -16,7 +16,6 @@ class CFR:
     def run_cfr(self,h,i,t,pi1,pi2):
 
         if self.poker.is_terminal(h):
-            #TODO -> Needs discussion with david
             return self.poker.utility(h)[self.poker.player(h)-1]  # Assumption - poker class has to check which player won and should return appropriate utility
         elif self.poker.player(h) not in self.players:
             card = self.poker.deal_cards(h) #poker class should know which round it is in
