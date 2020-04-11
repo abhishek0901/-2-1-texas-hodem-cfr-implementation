@@ -9,3 +9,5 @@ print(iSet.get_info_set('AdAcKsKhFF').get_key() == 'AcAdFF')
 print(iSet.get_info_set('AdAcKsKhFF').get_key() == 'AcAdFF')
 
 print(len(iSet.info_set_list) == 3)
+
+print(iSet.extract_key_from_history('01020726BBBBCC235119BBCC',1))
