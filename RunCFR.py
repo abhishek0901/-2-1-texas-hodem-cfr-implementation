@@ -8,11 +8,12 @@ import pickle
 import os
 from os import path
 
+
 class RunCFR:
 
-    def __init__(self,dir_name=''):
+    def __init__(self, dir_name=''):
         self.dir_name = dir_name
-        self.players = [1,2]
+        self.players = [1, 2]
         self.poker = poker.Poker()
         self.crt = "cumulative_regret_table.obj"
         self.cst = "cumulative_strategy_table.obj"
@@ -41,34 +42,32 @@ class RunCFR:
             self.info_sets = pickle.load(file)
             file.close()
 
+        self.cfr = cfr.CFR(self.poker, self.cumulative_regret_table, self.cumulative_strategy_table,
+                           self.strategy_profile, self.info_sets)
 
-
-        self.cfr = cfr.CFR(self.poker,self.cumulative_regret_table,self.cumulative_strategy_table,self.strategy_profile,self.info_sets)
-
-    def run_cfr(self,start,iterations):
-        for iter in range(start,iterations):
+    def run_cfr(self, start, iterations):
+        for iter in range(start, iterations):
             for i in self.players:
-                self.cfr.run_cfr('',i,iter,1,1)
+                self.cfr.run_cfr('', i, iter, 1, 1)
 
-
-            if iter % 10000 == 0:
+            if (iter+1) % 10000 == 0:
                 dir_name = './weights/weights_' + str(iter)
                 os.makedirs(dir_name)
 
-                file = open(dir_name + '/' + self.crt,'wb')
-                pickle.dump(self.cumulative_regret_table,file)
+                file = open(dir_name + '/' + self.crt, 'wb')
+                pickle.dump(self.cumulative_regret_table, file)
                 file.close()
 
                 file = open(dir_name + '/' + self.cst, 'wb')
-                pickle.dump(self.cumulative_strategy_table,file)
+                pickle.dump(self.cumulative_strategy_table, file)
                 file.close()
 
                 file = open(dir_name + '/' + self.sp, 'wb')
-                pickle.dump(self.strategy_profile,file)
+                pickle.dump(self.strategy_profile, file)
                 file.close()
 
                 file = open(dir_name + '/' + self.inofosset, 'wb')
-                pickle.dump(self.info_sets,file)
+                pickle.dump(self.info_sets, file)
                 file.close()
 
 
@@ -78,4 +77,4 @@ total_iter = 1000000
 directory_to_load = '' # For loading weights input relevant weight folder
 
 run_cfr = RunCFR(directory_to_load)
-run_cfr.run_cfr(start,total_iter)
+run_cfr.run_cfr(start, total_iter)
